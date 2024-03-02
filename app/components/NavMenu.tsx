@@ -3,6 +3,8 @@ import Link from 'next/link'
 import styles from './NavMenu.module.scss'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
+import { useEffect, useRef } from 'react'
+import Greeting from './Greeting'
 
 const pages = [
 	{ name: 'Home', href: '/' },
@@ -13,8 +15,55 @@ const pages = [
 
 export default function NavMenu() {
 	const { data: session } = useSession()
-	const pathname = usePathname()
+	const pathname = '/' + usePathname().split('/')[1]
+	const linksRef = useRef<HTMLDivElement>(null)
+	const linkUnderlineRef = useRef<HTMLDivElement>(null)
+
 	const signedIn = session !== null
+
+	useEffect(() => {
+		const linksElemArray = linksRef.current!.childNodes as NodeListOf<HTMLDivElement>
+		const linkUnderlineElem = linkUnderlineRef.current!
+
+		const currentPageIndex = pages.findIndex((page) => page.href === pathname)
+
+		if (currentPageIndex !== -1) {
+			const currentLinkElem = linksElemArray[currentPageIndex]
+
+			linkUnderlineElem.style.width = `${currentLinkElem.offsetWidth}px`
+			linkUnderlineElem.style.left = `${currentLinkElem.offsetLeft}px`
+		} else {
+			linkUnderlineElem.style.width = '0px'
+			linkUnderlineElem.style.left = '0px'
+		}
+	}, [pathname])
+
+	function SignInButton() {
+		return (
+			<button className={styles.sign_in} onClick={() => signIn()}>
+				Sign in
+			</button>
+		)
+	}
+
+	function SignOutButton() {
+		return (
+			<button className={styles.sign_out} onClick={() => signOut()}>
+				Sign out
+			</button>
+		)
+	}
+
+	function LinksContainer() {
+		return pages.map((page, index) => {
+			return (
+				<Link key={index} href={page.href} passHref>
+					<div className={styles.text}>{page.name}</div>
+				</Link>
+			)
+		})
+	}
+
 	return (
 		<div className={styles.menu}>
 			{!signedIn ? (
@@ -22,35 +71,15 @@ export default function NavMenu() {
 			) : (
 				<>
 					<div className={styles.link_container}>
-						{pages.map((page, index) => {
-							return (
-								<Link key={index} href={page.href} passHref>
-									<div className={pathname === page.href ? styles.current : ''}>
-										<div className={styles.text}>{page.name}</div>
-									</div>
-								</Link>
-							)
-						})}
+						<div className={styles.links} ref={linksRef}>
+							<LinksContainer />
+						</div>
+						<div className={styles.link_underline} ref={linkUnderlineRef} />
 					</div>
-					<SignOutButton />
+					<div className={styles.gap} />
+					<Greeting session={session} />
 				</>
 			)}
 		</div>
-	)
-}
-
-function SignInButton() {
-	return (
-		<button className={styles.sign_in} onClick={() => signIn()}>
-			Sign in
-		</button>
-	)
-}
-
-function SignOutButton() {
-	return (
-		<button className={styles.sign_out} onClick={() => signOut()}>
-			Sign out
-		</button>
 	)
 }

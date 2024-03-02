@@ -2,38 +2,28 @@
 	background-color: var(--col-acnt1-bg);
 	color: var(--col-acnt1-txt);
 
-	height: 60px;
+	height: var(--navbar-height);
+	justify-content: space-between;
 	display: flex;
-	justify-content: center;
 	align-items: center;
-	padding: 10px 20px;
+	padding: 10px 10px 10px 20px;
+	text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 
-	button.sign_in,
-	button.sign_out {
+	button.sign_in {
 		margin-left: auto;
 	}
-
 	.link_container {
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		display: flex;
-		user-select: none;
-
-		div {
-			padding: 2px 3px;
-			box-sizing: content-box;
-			transition: border-color 0.2s ease;
-			border-color: transparent;
-			&.current {
-				border-bottom: 3px solid;
-				border-color: var(--col-acnt1-txt);
-				padding-bottom: 1px;
-			}
+		position: relative;
+		.links {
+			display: flex;
+			gap: 15px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			user-select: none;
 			.text {
 				cursor: pointer;
-				transition: transform 0.1s ease, text-shadow 0.1s ease, filter 0.1s ease;
-				text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+				transition: transform 0.2s ease, text-shadow 0.2s ease, filter 0.1s ease;
 				&:hover,
 				&:focus {
 					transform: translate(-1px, -1px);
@@ -44,6 +34,14 @@
 					transform: translate(0px, 0px);
 				}
 			}
+		}
+		.link_underline {
+			position: absolute;
+			height: 3px;
+			transform: translateY(2px);
+			background-color: var(--col-acnt1-txt);
+			transition: width 0.3s ease, left 0.3s ease;
+			box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 		}
 	}
 

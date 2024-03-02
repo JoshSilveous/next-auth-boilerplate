@@ -6,9 +6,12 @@
 	--col-prim3-bg: #96939b;
 	--col-prim3-txt: black;
 	--col-acnt1-bg: #564256;
+	--col-acnt1-bg2: #3a2d3a;
 	--col-acnt1-txt: white;
 	--col-acnt2-bg: #fc814a;
 	--col-acnt2-txt: white;
+
+	--navbar-height: 60px;
 }
 
 * {
@@ -52,8 +55,14 @@ button {
 	}
 }
 
+main {
+	background-color: teal;
+	height: calc(100vh - var(--navbar-height));
+	overflow: auto;
+}
+
 @media (prefers-color-scheme: dark) {
 	html {
-		color-scheme: dark;
+		/* color-scheme: dark; */
 	}
 }
