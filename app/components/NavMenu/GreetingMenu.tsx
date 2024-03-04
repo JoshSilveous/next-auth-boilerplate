@@ -1,10 +1,16 @@
 import { Session } from 'next-auth'
-import styles from './Greeting.module.scss'
+import styles from './GreetingMenu.module.scss'
 import { useEffect, useRef, useState } from 'react'
 import MenuIcon from '@/public/menu-hamburger.svg'
 import MenuExitIcon from '@/public/exit.svg'
 
-export default function Greeting({ session }: { session: Session }) {
+export default function GreetingMenu({
+	session,
+	menuItems,
+}: {
+	session: Session
+	menuItems: JSX.Element[]
+}) {
 	const [menuOpen, setMenuOpen] = useState<boolean>()
 	const menuContainerRef = useRef<HTMLDivElement>(null)
 
@@ -47,10 +53,13 @@ export default function Greeting({ session }: { session: Session }) {
 				</div>
 			</div>
 			<div className={styles.menu_content}>
-				<div className={styles.menu_row}>example content</div>
-				<div className={styles.menu_row}>example content</div>
-				<div className={styles.menu_row}>example content</div>
-				<div className={styles.menu_row}>example content</div>
+				{menuItems.map((menuItem, index) => {
+					return (
+						<div className={styles.menu_row} key={index}>
+							{menuItem}
+						</div>
+					)
+				})}
 			</div>
 		</div>
 	)

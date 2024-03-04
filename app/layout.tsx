@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import SessionProvider from './components/SessionProvider'
 import { getServerSession } from 'next-auth'
-import NavMenu from './components/NavMenu'
+import NavMenu from './components/NavMenu/NavMenu'
 
 const inter = Inter({ subsets: ['latin'] })
 

@@ -1,25 +1,26 @@
 'use client'
 import Link from 'next/link'
 import styles from './NavMenu.module.scss'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef } from 'react'
-import Greeting from './Greeting'
-
-const pages = [
-	{ name: 'Home', href: '/' },
-	{ name: 'Transactions', href: '/transactions' },
-	{ name: 'Categories', href: '/categories' },
-	{ name: 'Accounts', href: '/accounts' },
-]
+import GreetingMenu from './GreetingMenu'
 
 export default function NavMenu() {
 	const { data: session } = useSession()
 	const pathname = '/' + usePathname().split('/')[1]
 	const linksRef = useRef<HTMLDivElement>(null)
 	const linkUnderlineRef = useRef<HTMLDivElement>(null)
-
 	const signedIn = session !== null
+
+	const pages = [
+		{ name: 'Home', href: '/' },
+		{ name: 'Transactions', href: '/transactions' },
+		{ name: 'Categories', href: '/categories' },
+		{ name: 'Accounts', href: '/accounts' },
+	]
+
+	const menuItems = [<div>Settings</div>, <div>Sign Out</div>]
 
 	useEffect(() => {
 		const linksElemArray = linksRef.current!.childNodes as NodeListOf<HTMLDivElement>
@@ -38,46 +39,30 @@ export default function NavMenu() {
 		}
 	}, [pathname])
 
-	function SignInButton() {
+	const links = pages.map((page, index) => {
 		return (
-			<button className={styles.sign_in} onClick={() => signIn()}>
-				Sign in
-			</button>
+			<Link key={index} href={page.href} passHref>
+				<div className={styles.text}>{page.name}</div>
+			</Link>
 		)
-	}
-
-	function SignOutButton() {
-		return (
-			<button className={styles.sign_out} onClick={() => signOut()}>
-				Sign out
-			</button>
-		)
-	}
-
-	function LinksContainer() {
-		return pages.map((page, index) => {
-			return (
-				<Link key={index} href={page.href} passHref>
-					<div className={styles.text}>{page.name}</div>
-				</Link>
-			)
-		})
-	}
+	})
 
 	return (
 		<div className={styles.menu}>
 			{!signedIn ? (
-				<SignInButton />
+				<button className={styles.sign_in} onClick={() => signIn()}>
+					Sign in
+				</button>
 			) : (
 				<>
 					<div className={styles.link_container}>
 						<div className={styles.links} ref={linksRef}>
-							<LinksContainer />
+							{links}
 						</div>
 						<div className={styles.link_underline} ref={linkUnderlineRef} />
 					</div>
 					<div className={styles.gap} />
-					<Greeting session={session} />
+					<GreetingMenu session={session} menuItems={menuItems} />
 				</>
 			)}
 		</div>
