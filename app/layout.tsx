@@ -4,6 +4,7 @@ import './globals.css'
 import SessionProvider from './components/SessionProvider'
 import { getServerSession } from 'next-auth'
 import NavMenu from './components/NavMenu/NavMenu'
+import NavBar from './components/NavBar/NavBar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,11 +19,24 @@ export default async function RootLayout({
 	children: React.ReactNode
 }>) {
 	const session = await getServerSession()
+	const navbarData = {
+		pages: [
+			{ name: 'Home', href: '/' },
+			{ name: 'Transactions', href: '/transactions' },
+			{ name: 'Categories', href: '/categories' },
+			{ name: 'Accounts', href: '/accounts' },
+		],
+		accountOptions: [
+			{ name: 'Settings', href: '/' },
+			{ name: 'Sign Out', href: '/' },
+		],
+	}
+
 	return (
 		<html lang='en'>
 			<body className={inter.className}>
 				<SessionProvider session={session}>
-					<NavMenu />
+					<NavBar navBarData={navbarData} />
 					<main>{children}</main>
 				</SessionProvider>
 			</body>

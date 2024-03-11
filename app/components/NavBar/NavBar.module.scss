@@ -1,0 +1,29 @@
+.navbar {
+	background-color: var(--col-acnt1-bg);
+	color: var(--col-acnt1-txt);
+	min-height: var(--navbar-height);
+	padding: 10px 20px;
+	display: flex;
+	align-items: center;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	user-select: none;
+
+	.mobile {
+		display: none;
+		width: 100%;
+	}
+	.desktop {
+		display: flex;
+		width: 100%;
+	}
+	@media (max-width: 800px) {
+		.mobile {
+			display: flex;
+		}
+		.desktop {
+			display: none;
+		}
+	}
+}

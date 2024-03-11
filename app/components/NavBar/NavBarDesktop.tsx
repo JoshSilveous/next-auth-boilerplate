@@ -1,17 +1,82 @@
+'use client'
+import Link from 'next/link'
+import { signIn } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 import { Session } from 'next-auth'
-import styles from './GreetingMenu.module.scss'
+import styles from './NavBarDesktop.module.scss'
 import { useEffect, useRef, useState } from 'react'
 import MenuIcon from '@/public/menu-hamburger.svg'
 import MenuExitIcon from '@/public/exit.svg'
 import { waitFor } from '@/util/waitFor'
+import { NavBarData } from './NavBar'
 
-export default function GreetingMenu({
+export default function NavBarDesktop({
+	navBarData,
 	session,
-	menuItems,
 }: {
-	session: Session
-	menuItems: JSX.Element[]
+	navBarData: NavBarData
+	session: Session | null
 }) {
+	const pathname = '/' + usePathname().split('/')[1]
+	const linksRef = useRef<HTMLDivElement>(null)
+	const linkUnderlineRef = useRef<HTMLDivElement>(null)
+	const signedIn = session !== null
+
+	useEffect(() => {
+		const linksElemArray = linksRef.current!.childNodes as NodeListOf<HTMLDivElement>
+		const linkUnderlineElem = linkUnderlineRef.current!
+
+		const currentPageIndex = navBarData.pages.findIndex((page) => page.href === pathname)
+
+		if (currentPageIndex !== -1) {
+			const currentLinkElem = linksElemArray[currentPageIndex]
+
+			linkUnderlineElem.style.width = `${currentLinkElem.offsetWidth}px`
+			linkUnderlineElem.style.left = `${currentLinkElem.offsetLeft}px`
+		} else {
+			linkUnderlineElem.style.width = '0px'
+			linkUnderlineElem.style.left = '0px'
+		}
+	}, [pathname])
+
+	const links = navBarData.pages.map((page, index) => {
+		return (
+			<Link key={index} href={page.href} passHref>
+				<div className={styles.text}>{page.name}</div>
+			</Link>
+		)
+	})
+	const menuItems = navBarData.accountOptions.map((accountOption, index) => {
+		return (
+			<Link key={index} href={accountOption.href} passHref>
+				<div>{accountOption.name}</div>
+			</Link>
+		)
+	})
+
+	return (
+		<div className={styles.menu}>
+			{!signedIn ? (
+				<button className={styles.sign_in} onClick={() => signIn()}>
+					Sign in
+				</button>
+			) : (
+				<>
+					<div className={styles.link_container}>
+						<div className={styles.links} ref={linksRef}>
+							{links}
+						</div>
+						<div className={styles.link_underline} ref={linkUnderlineRef} />
+					</div>
+					<div className={styles.gap} />
+					<GreetingMenu session={session} menuItems={menuItems} />
+				</>
+			)}
+		</div>
+	)
+}
+
+function GreetingMenu({ session, menuItems }: { session: Session; menuItems: JSX.Element[] }) {
 	const [menuOpen, setMenuOpen] = useState<boolean>()
 	const menuContainerRef = useRef<HTMLDivElement>(null)
 
@@ -47,7 +112,7 @@ export default function GreetingMenu({
 
 	return (
 		<div
-			className={`${styles.menu_container} ${menuOpen ? styles.expanded : ''}`}
+			className={`${styles.greeting_menu_container} ${menuOpen ? styles.expanded : ''}`}
 			ref={menuContainerRef}
 		>
 			<div className={styles.greeting_container} onClick={() => setMenuOpen((prev) => !prev)}>

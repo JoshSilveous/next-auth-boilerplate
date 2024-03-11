@@ -1,4 +1,52 @@
-.menu_container {
+.menu {
+	background-color: var(--col-acnt1-bg);
+	color: var(--col-acnt1-txt);
+
+	height: var(--navbar-height);
+	justify-content: space-between;
+	display: flex;
+	align-items: center;
+	padding: 10px 10px 10px 20px;
+	text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+	width: 100%;
+
+	button.sign_in {
+		margin-left: auto;
+	}
+	.link_container {
+		position: relative;
+		.links {
+			display: flex;
+			gap: 15px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			user-select: none;
+			.text {
+				cursor: pointer;
+				transition: transform 0.2s ease, text-shadow 0.2s ease, filter 0.1s ease;
+				&:hover,
+				&:focus {
+					transform: translate(-1px, -1px);
+					text-shadow: 4px 4px 7px rgba(0, 0, 0, 0.3);
+				}
+				&:active {
+					filter: brightness(95%);
+					transform: translate(0px, 0px);
+				}
+			}
+		}
+		.link_underline {
+			position: absolute;
+			height: 3px;
+			transform: translateY(2px);
+			background-color: var(--col-acnt1-txt);
+			transition: width 0.3s ease, left 0.3s ease;
+			box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+		}
+	}
+}
+.greeting_menu_container {
 	padding: 8px 10px 5px 10px;
 	display: flex;
 	flex-direction: column;
@@ -12,7 +60,6 @@
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	user-select: none;
-	margin-left: auto;
 
 	.greeting_container {
 		display: flex;
@@ -56,7 +103,7 @@
 	&.expanded {
 		position: absolute;
 		height: auto;
-		right: 10px;
+		right: 30px;
 		background-color: var(--col-acnt1-bg2);
 		box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 		.menu_icon_container {
@@ -77,17 +124,5 @@
 		margin-top: 25px;
 		padding-bottom: 3px;
 		font-weight: 500;
-	}
-}
-@media (max-width: 770px) {
-	.menu_container {
-		.greeting_container {
-			.greeting {
-				display: none;
-			}
-			.menu_icon_container {
-				margin-left: auto;
-			}
-		}
 	}
 }
